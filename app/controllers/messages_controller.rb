@@ -24,11 +24,27 @@ class MessagesController < ApplicationController
     if @user == @message.user
       @message.update(message_params)
       render status: 200, json: {
-        message: "Your quote has been updated successfully."
+        message: "Your message has been updated successfully."
       }
     else
       render status: 401, json: {
         message: "Not authorized to edit this message."
+      }
+    end
+  end
+
+  def destroy
+    @group = Group.find(params[:group_id])
+    @user = current_user
+    @message = @group.messages.find(params[:id])
+    if @user == @message.user
+      @message.destroy
+      render status: 200, json: {
+        message: "Your message has been deleted successfully."
+      }
+    else
+      render status: 401, json: {
+        message: "Not authorized to delete this message."
       }
     end
   end
