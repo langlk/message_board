@@ -1,5 +1,6 @@
 class GroupsController < ApplicationController
   include Response
+  include ResponseErrors
 
   def index
     @groups = Group.all
