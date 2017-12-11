@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "get all groups route", type: :request do
+describe "get a group route", type: :request do
   let!(:group) { FactoryBot.create(:group) }
 
   before { get "/groups/#{group.id}" }
