@@ -4,7 +4,13 @@ class MessagesController < ApplicationController
 
   def index
     @group = Group.find(params[:group_id])
-    @messages = @group.messages
+    if params[:start_time] && params[:end_time]
+      start_time = Time.parse(params[:start_time]).utc
+      end_time = Time.parse(params[:end_time]).utc
+      @messages = @group.messages.timeframe(start_time, end_time)
+    else
+      @messages = @group.messages
+    end
     json_response(@messages)
   end
 
