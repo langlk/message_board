@@ -17,6 +17,22 @@ class MessagesController < ApplicationController
     json_response(@message, :created)
   end
 
+  def update
+    @group = Group.find(params[:group_id])
+    @user = current_user
+    @message = @group.messages.find(params[:id])
+    if @user == @message.user
+      @message.update(message_params)
+      render status: 200, json: {
+        message: "Your quote has been updated successfully."
+      }
+    else
+      render status: 401, json: {
+        message: "Not authorized to edit this message."
+      }
+    end
+  end
+
 private
   def message_params
     params.permit(:content)
