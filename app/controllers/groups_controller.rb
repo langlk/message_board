@@ -8,6 +8,7 @@ class GroupsController < ApplicationController
   end
 
   def show
+    binding.pry
     @group = Group.find(params[:id])
     json_response(@group)
   end

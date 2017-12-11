@@ -10,7 +10,7 @@ class MessagesController < ApplicationController
 
   def create
     @group = Group.find(params[:group_id])
-    @user = User.first
+    @user = current_user
     @message = @group.messages.new(message_params)
     @message.user = @user
     @message.save!
@@ -20,5 +20,9 @@ class MessagesController < ApplicationController
 private
   def message_params
     params.permit(:content)
+  end
+
+  def current_user
+    AuthorizeApiRequest.call(request.headers).result
   end
 end
