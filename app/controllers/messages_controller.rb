@@ -14,7 +14,7 @@ class MessagesController < ApplicationController
     @message = @group.messages.new(message_params)
     @message.user = @user
     @message.save!
-    json_response(@message)
+    json_response(@message, :created)
   end
 
 private

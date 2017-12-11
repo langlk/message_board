@@ -16,6 +16,10 @@ describe "post a message route", type: :request do
     expect(JSON.parse(response.body)['user_id']).to eq(user.id)
   end
 
+  it "returns a created code" do
+    expect(response).to have_http_status(:created)
+  end
+
   it "returns an unprocessable entity code if message can't be saved" do
     post "/groups/#{group.id}/messages"
     expect(response).to have_http_status(:unprocessable_entity)
