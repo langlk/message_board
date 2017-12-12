@@ -15,6 +15,7 @@ require "action_cable/engine"
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
+require 'rack/throttle'
 
 module MessageBoard
   class Application < Rails::Application
@@ -31,5 +32,6 @@ module MessageBoard
     config.api_only = true
     # load lib
     config.autoload_paths << Rails.root.join('lib')
+    config.middleware.use Rack::Throttle::Daily, max: 1000
   end
 end

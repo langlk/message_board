@@ -25,9 +25,12 @@ To install on your own machine, follow the instructions below:
 
 ## Specifications
 
+### Version 1
 
-### API calls:
-#### Version 1
+Limited to 1000 requests per day per IP address.
+
+#### API calls:
+
 Preface all api calls with ```/api/v1```
 * ```POST /authenticate```
   * **Parameters**
