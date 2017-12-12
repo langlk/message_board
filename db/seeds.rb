@@ -18,6 +18,7 @@ class Seed
     User.destroy_all
     Group.destroy_all
     Message.destroy_all
+    ApiKey.destroy_all
   end
 
   def generate_boards
@@ -25,8 +26,9 @@ class Seed
     20.times do
       name = Faker::Fallout.unique.character
       user = User.create!(
-      name: name,
-      email: "#{name}@vaulttec.com"
+        name: name,
+        email: "#{name}@vaulttec.com",
+        password: "warneverchanges"
       )
       users.push(user)
     end

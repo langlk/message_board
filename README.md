@@ -27,31 +27,61 @@ To install on your own machine, follow the instructions below:
 
 ### Version 1
 
+#### Authorization
+
+All API calls besides creating a new user require an api key.
+
+Posting, editing, and deleting messages requires an authentication token acquired from the ```Post /authenticate``` in addition to the api key.
+
 Limited to 1000 requests per day per api key.
 
 #### API calls:
 
 Preface all api calls with ```/api/v1```
+* ```Post /users```
+  * **Parameters**
+    * email: ```string``` (required)
+    * name: ```string``` (required)
+    * password: ```string``` (required)
+  * Creates an account with the given user name, email, and password, and returns the user's api key.
 * ```POST /authenticate```
   * **Parameters**
+    * key: ```string``` (required)
     * email: ```string``` (required)
     * password: ```string``` (required)
   * Returns an authentication token for the user with provided email and password.
 * ```GET /groups```
+  * **Parameters**
+    * key: ```string``` (required)
   * Returns all groups.
 * ```GET /groups/{group_id}```
+  * **Parameters**
+    * key: ```string``` (required)
   * Returns information about the group with provided group_id.
 * ```GET /groups/{group_id}/messages```
   * **Parameters**
+    * key: ```string``` (required)
     * start_time: ```timestamp``` (optional)
     * end_time: ```timestamp``` (optional)
   * Returns all messages for the group with provided group_id. Limits to messages created between start_time and end_time if both params are provided.
 * ```POST /groups/{group_id}/messages```
+  * **Headers**
+    * Authorization: ```string``` (required)
+  * **Parameters**
+    * key: ```string``` (required)
   * Posts a new message to the group with provided group_id.
 * ```PUT /groups/{group_id}/messages/{message_id}```
-  * Edits the message with provivded message_id in group with group_id.
+  * **Headers**
+    * Authorization: ```string``` (required)
+  * **Parameters**
+    * key: ```string``` (required)
+  * Edits the message with provided message_id in group with group_id.
 * ```DELETE /groups/{group_id}/messages/{message_id}```
-  * Deletes the message with provivded message_id in group with group_id.
+  * **Headers**
+    * Authorization: ```string``` (required)
+  * **Parameters**
+    * key: ```string``` (required)
+  * Deletes the message with provided message_id in group with group_id.
 
 ## Support and contact details
 
