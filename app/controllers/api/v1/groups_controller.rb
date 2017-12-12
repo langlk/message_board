@@ -1,7 +1,4 @@
 class Api::V1::GroupsController < Api::V1::BaseController
-  include Response
-  include ResponseErrors
-
   def index
     @groups = Group.all
     json_response(@groups)

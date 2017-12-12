@@ -1,4 +1,7 @@
 class Api::V1::BaseController < ApplicationController
+  include Response
+  include ResponseErrors
+  
   attr_reader :current_user
   before_action :restrict_access
 

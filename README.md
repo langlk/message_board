@@ -27,7 +27,7 @@ To install on your own machine, follow the instructions below:
 
 ### Version 1
 
-Limited to 1000 requests per day per IP address.
+Limited to 1000 requests per day per api key.
 
 #### API calls:
 
