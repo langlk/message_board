@@ -1,4 +1,4 @@
-class MessagesController < ApplicationController
+class Api::V1::MessagesController < Api::V1::BaseController
   include Response
   include ResponseErrors
 

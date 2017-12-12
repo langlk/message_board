@@ -1,4 +1,4 @@
-class GroupsController < ApplicationController
+class Api::V1::GroupsController < Api::V1::BaseController
   include Response
   include ResponseErrors
 
@@ -8,7 +8,6 @@ class GroupsController < ApplicationController
   end
 
   def show
-    binding.pry
     @group = Group.find(params[:id])
     json_response(@group)
   end
