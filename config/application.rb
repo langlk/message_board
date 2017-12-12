@@ -16,6 +16,7 @@ require "action_cable/engine"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 require 'rack/throttle'
+require './lib/api_key_daily'
 
 module MessageBoard
   class Application < Rails::Application
@@ -32,6 +33,6 @@ module MessageBoard
     config.api_only = true
     # load lib
     config.autoload_paths << Rails.root.join('lib')
-    config.middleware.use Rack::Throttle::Daily, max: 1000
+    config.middleware.use ApiKeyDaily, max: 1000
   end
 end
