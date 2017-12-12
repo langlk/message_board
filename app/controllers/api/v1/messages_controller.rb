@@ -1,6 +1,7 @@
 class Api::V1::MessagesController < Api::V1::BaseController
   include Response
   include ResponseErrors
+  before_action :authenticate_request, except: [:index, :show]
 
   def index
     @group = Group.find(params[:group_id])
