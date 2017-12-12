@@ -25,7 +25,10 @@ To install on your own machine, follow the instructions below:
 
 ## Specifications
 
+
 ### API calls:
+#### Version 1
+Preface all api calls with ```/api/v1```
 * ```POST /authenticate```
   * **Parameters**
     * email: ```string``` (required)
