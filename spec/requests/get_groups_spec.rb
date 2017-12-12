@@ -2,8 +2,9 @@ require "rails_helper"
 
 describe "get all groups route", type: :request do
   let!(:groups) { FactoryBot.create_list(:group, 10) }
+  let!(:user) { FactoryBot.create(:user) }
 
-  before { get '/groups' }
+  before { get '/api/v1/groups', params: { key: user.api_key.access_token } }
 
   it 'returns all groups' do
     expect(JSON.parse(response.body).size).to eq(10)

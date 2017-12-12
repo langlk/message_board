@@ -10,6 +10,7 @@ FactoryBot.define do
   factory(:user) do
     name(Faker::Fallout.unique.character)
     email(Faker::Fallout.unique.location)
+    password("warneverchanges")
   end
 
   factory(:message) do

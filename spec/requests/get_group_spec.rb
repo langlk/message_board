@@ -2,8 +2,9 @@ require "rails_helper"
 
 describe "get a group route", type: :request do
   let!(:group) { FactoryBot.create(:group) }
+  let!(:user) { FactoryBot.create(:user) }
 
-  before { get "/groups/#{group.id}" }
+  before { get "/api/v1/groups/#{group.id}", params: { key: user.api_key.access_token } }
 
   it 'returns the correct group' do
     expect(JSON.parse(response.body)["name"]).to eq(group.name)

@@ -5,7 +5,7 @@ describe "get a group's messages route", type: :request do
   let!(:user) { FactoryBot.create(:user)}
   let!(:message) { FactoryBot.create_list(:message, 10, group: group, user: user) }
 
-  before { get "/groups/#{group.id}/messages" }
+  before { get "/api/v1/groups/#{group.id}/messages", params: { key: user.api_key.access_token } }
 
   it "returns a list of a groups messages" do
     expect(JSON.parse(response.body).size).to eq(10)

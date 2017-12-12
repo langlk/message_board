@@ -5,7 +5,9 @@ describe "post a message route", type: :request do
   let!(:user) { FactoryBot.create(:user) }
 
   before do
-    post "/groups/#{group.id}/messages", params: { content: "War, war never changes."}
+    post "/api/v1/authenticate", params: { key: user.api_key.access_token, email: user.email, password: user.password }
+    auth_token = JSON.parse(response.body)["auth_token"]
+    post "/api/v1/groups/#{group.id}/messages", params: { key: user.api_key.access_token, content: "War, war never changes."}, headers: { Authorization: auth_token}
   end
 
   it "returns the quote content" do
@@ -21,7 +23,9 @@ describe "post a message route", type: :request do
   end
 
   it "returns an unprocessable entity code if message can't be saved" do
-    post "/groups/#{group.id}/messages"
+    post "/api/v1/authenticate", params: { key: user.api_key.access_token, email: user.email, password: user.password }
+    auth_token = JSON.parse(response.body)["auth_token"]
+    post "/api/v1/groups/#{group.id}/messages", params: { key: user.api_key.access_token }, headers: { Authorization: auth_token}
     expect(response).to have_http_status(:unprocessable_entity)
   end
 end
