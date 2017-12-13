@@ -7,6 +7,7 @@ class Message < ActiveRecord::Base
   before_create :add_username
 
   scope :timeframe, -> (start_time, end_time) { where('created_at >= ? AND created_at < ?', start_time, end_time) }
+  scope :chronological, -> { order("created_at ASC") }
 
   def add_username
     self.username = user.name

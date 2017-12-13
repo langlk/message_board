@@ -6,9 +6,9 @@ class Api::V1::MessagesController < Api::V1::BaseController
     if params[:start_time] && params[:end_time]
       start_time = Time.parse(params[:start_time]).utc
       end_time = Time.parse(params[:end_time]).utc
-      @messages = @group.messages.timeframe(start_time, end_time)
+      @messages = @group.messages.timeframe(start_time, end_time).chronological
     else
-      @messages = @group.messages
+      @messages = @group.messages.chronological
     end
     json_response(@messages)
   end
