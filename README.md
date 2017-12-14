@@ -1,27 +1,26 @@
 # Message Board API
 
-# E-Commerce Refactor
-
 ### _Epicodus Practice in Ruby on Rails, December 11, 2017_
 
 ### By Kelsey Langlois
 
 ## Description
 
+_This is an API for an example message board. It allows users to sign up, view groups and messages, log in, and create/update/delete their own messages._
+
 ## Installation and Setup
 
 To install on your own machine, follow the instructions below:
 
 * Clone this repository.
-* Ensure you have ImageMagick installed. Instructions are available [here](https://github.com/thoughtbot/paperclip#image-processor).
 * Run the following commands in the project root directory:
   ```
   bundle update
   rake db:setup
   rails db:seed
-  rails s
+  rails s -p 3001
   ```
-* Open ```localhost:3000``` in your web browser
+* Open ```localhost:3001``` in your web browser
 
 ## Specifications
 
