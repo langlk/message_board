@@ -1,0 +1,537 @@
+swagger: '2.0'
+info:
+  description: >-
+    This is an API for a example message board.  You can find out more about    
+    Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net,
+    #swagger](http://swagger.io/irc/)..
+  version: 1.0.0
+  title: Message Board API
+  termsOfService: 'http://swagger.io/terms/'
+  contact:
+    email: kels.langlois@gmail.com
+  license:
+    name: MIT license
+host: 'localhost:3001'
+basePath: /api/v1
+tags:
+  - name: users
+    description: Creating users
+  - name: authentication
+    description: Authorizing user access
+  - name: groups
+    description: Information on message board groups
+  - name: messages
+    description: Viewing and managing messages
+schemes:
+  - http
+paths:
+  /users:
+    post:
+      tags:
+        - users
+      summary: Create a new user account
+      description: Creates a new user account and returns associated api key.
+      produces:
+        - application/json
+      parameters:
+        - name: name
+          in: params
+          type: string
+          description: 'Username: must be unique.'
+          required: true
+        - name: email
+          in: params
+          type: string
+          description: 'User email: must be unique.'
+          required: true
+        - name: password
+          in: params
+          type: string
+          description: User password.
+          required: true
+      responses:
+        '200':
+          description: 'Success message, user details, and api key.'
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: User created successfully.
+              name:
+                type: string
+                example: arcade_gannon
+              email:
+                type: string
+                example: arcade@followers.org
+              key:
+                type: string
+                example: 7761726e657665726368616e676573
+        '422':
+          description: User could not be created
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: 'Validation failed: Name has already been taken'
+  /authenticate:
+    post:
+      tags:
+        - authentication
+      summary: Obtain a user access token
+      description: Creates an authentication token for a user good for 24 hours.
+      produces:
+        - application/json
+      parameters:
+        - name: key
+          in: params
+          type: string
+          description: API key generated for user.
+          required: true
+        - name: email
+          in: params
+          type: string
+          description: User email.
+          required: true
+        - name: password
+          in: params
+          type: string
+          description: User password.
+          required: true
+      responses:
+        '200':
+          description: 'Successful login, returns auth token.'
+          schema:
+            type: object
+            properties:
+              auth_token:
+                type: string
+                example: >-
+                  aSBkb24ndCB3YW50IHRvIHNldCB0aGUgd29ybGQgb24gZmlyZQ0KaSBqdXN0IHdhbnQgdG8gc3RhcnQNCmEgZmxhbWUgaW4geW91ciBoZWFydA==
+        '401':
+          description: User could not be authorized
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Invalid credentials.
+  /groups:
+    get:
+      tags:
+        - groups
+      summary: Get a list of all groups
+      description: Returns an array of all groups.
+      produces:
+        - application/json
+      parameters:
+        - name: key
+          in: params
+          type: string
+          description: API key generated for user.
+          required: true
+      responses:
+        '200':
+          description: A list of group objects
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: '1'
+                name:
+                  type: string
+                  example: New California Republic
+                description:
+                  type: string
+                  example: >-
+                    Patrolling the Mojave Wasteland almost makes you wish for a
+                    nuclear winter.
+                created_at:
+                  type: string
+                  example: '2017-12-13T22:47:56.204Z'
+                updated_at:
+                  type: string
+                  example: '2017-12-13T22:47:56.204Z'
+        '401':
+          description: Unauthorized
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Not Authorized
+  '/groups/{id}':
+    get:
+      tags:
+        - groups
+      summary: Find a group by its id
+      description: Returns the information about a single group based on its id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: integer
+          description: The id of the group to find.
+          required: true
+        - name: key
+          in: params
+          type: string
+          description: API key generated for user.
+          required: true
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: '1'
+              name:
+                type: string
+                example: New California Republic
+              description:
+                type: string
+                example: >-
+                  Patrolling the Mojave Wasteland almost makes you wish for a
+                  nuclear winter.
+              created_at:
+                type: string
+                example: '2017-12-13T22:47:56.204Z'
+              updated_at:
+                type: string
+                example: '2017-12-13T22:47:56.204Z'
+        '401':
+          description: Unauthorized
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Not Authorized
+        '404':
+          description: Group not found
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Could not find Group with 'id'=1
+  '/groups/{id}/messages':
+    get:
+      tags:
+        - messages
+      summary: Get a list of a group's messages
+      description: Returns all messages posted to a specific group.
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Group to get messages for.
+          required: true
+          type: integer
+        - name: key
+          in: params
+          type: string
+          description: API key generated for user.
+          required: true
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: '1'
+                user_id:
+                  type: integer
+                  example: '2'
+                group_id:
+                  type: integer
+                  example: '3'
+                content:
+                  type: string
+                  example: 'War, war never changes.'
+                created_at:
+                  type: string
+                  example: '2017-12-13T22:47:56.204Z'
+                updated_at:
+                  type: string
+                  example: '2017-12-13T22:47:56.204Z'
+                username:
+                  type: string
+                  example: arcade_gannon
+        '401':
+          description: Unauthorized
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Not Authorized
+        '404':
+          description: Group not found
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Could not find Group with 'id'=1
+    post:
+      tags:
+        - messages
+      summary: Post a new message
+      description: >-
+        Posts a new message to the given group, authored by the user whose token
+        is provided
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Group to post message to.
+          required: true
+          type: integer
+        - name: key
+          in: params
+          type: string
+          description: API key generated for user.
+          required: true
+        - name: content
+          in: params
+          description: Message content to post.
+          type: string
+          required: true
+        - name: Authorization
+          in: header
+          description: 'User authentication token, generagted from ''/authenticate'''
+          type: string
+          required: true
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: '1'
+              user_id:
+                type: integer
+                example: '2'
+              group_id:
+                type: integer
+                example: '3'
+              content:
+                type: string
+                example: 'War, war never changes.'
+              created_at:
+                type: string
+                example: '2017-12-13T22:47:56.204Z'
+              updated_at:
+                type: string
+                example: '2017-12-13T22:47:56.204Z'
+              username:
+                type: string
+                example: arcade_gannon
+        '401':
+          description: Unauthorized
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Not Authorized
+        '404':
+          description: Group not found
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Could not find Group with 'id'=1
+        '422':
+          description: Message could not be posted.
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: 'Validation failed: content can''t be blank'
+  '/groups/{group_id}/messages/{message_id}':
+    patch:
+      tags:
+        - messages
+      summary: Updates a message
+      description: Updates a message if the authorized user posted it.
+      produces:
+        - application/json
+      parameters:
+        - name: group_id
+          in: path
+          description: Group to delete message from.
+          required: true
+          type: integer
+        - name: message_id
+          in: path
+          description: Message to delete.
+          required: true
+          type: integer
+        - name: key
+          in: params
+          type: string
+          description: API key generated for user.
+          required: true
+        - name: content
+          in: params
+          description: Message content to update.
+          type: string
+          required: true
+        - name: Authorization
+          in: header
+          description: 'User authentication token, generagted from ''/authenticate'''
+          type: string
+          required: true
+      responses:
+        '200':
+          description: successful update
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Your message has been updated successfully.
+        '401':
+          description: Unauthorized
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Not Authorized
+        '404':
+          description: Group or message not found
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Could not find Group with 'id'=1
+        '422':
+          description: Message could not be updated.
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: 'Validation failed: content can''t be blank'
+    delete:
+      tags:
+        - messages
+      summary: Deletes a message
+      description: Deletes a message if the authorized user posted it.
+      produces:
+        - application/json
+      parameters:
+        - name: group_id
+          in: path
+          description: Group to delete message from.
+          required: true
+          type: integer
+        - name: message_id
+          in: path
+          description: Message to delete.
+          required: true
+          type: integer
+        - name: key
+          in: params
+          type: string
+          description: API key generated for user.
+          required: true
+        - name: Authorization
+          in: header
+          description: 'User authentication token, generagted from ''/authenticate'''
+          type: string
+          required: true
+      responses:
+        '200':
+          description: successful delete
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Your message has been deleted successfully.
+        '401':
+          description: Unauthorized
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Not Authorized
+        '404':
+          description: Group or message not found
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Could not find Group with 'id'=1
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+  ApiKey:
+    type: object
+    properties:
+      id:
+        type: integer
+      user_id:
+        type: integer
+      access_token:
+        type: string
+  Group:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      description:
+        type: string
+  Message:
+    type: object
+    properties:
+      id:
+        type: integer
+      group_id:
+        type: integer
+      user_id:
+        type: integer
+      username:
+        type: string
+      content:
+        type: string
+    xml:
+      name: Tag
+externalDocs:
+  description: Find out more about Swagger
+  url: 'http://swagger.io'
